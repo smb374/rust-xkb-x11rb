@@ -12,62 +12,58 @@
 //
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-use ffi::*;
 use crate::context::{Flags, Include, Log};
+use ffi::*;
 
 #[derive(Debug)]
 pub struct Context(*mut xkb_context);
 
 impl Default for Context {
-	#[inline]
-	fn default() -> Self {
-		Context::new(Default::default())
-	}
+    #[inline]
+    fn default() -> Self {
+        Context::new(Default::default())
+    }
 }
 
 impl Context {
-	#[inline]
-	pub unsafe fn from_ptr(ptr: *mut xkb_context) -> Self {
-		Context(ptr)
-	}
+    #[inline]
+    pub unsafe fn from_ptr(ptr: *mut xkb_context) -> Self {
+        Context(ptr)
+    }
 
-	#[inline]
-	pub unsafe fn as_ptr(&self) -> *mut xkb_context {
-		self.0
-	}
+    #[inline]
+    pub unsafe fn as_ptr(&self) -> *mut xkb_context {
+        self.0
+    }
 
-	#[inline]
-	pub fn new(flags: Flags) -> Self {
-		unsafe {
-			Context(xkb_context_new(flags.bits()))
-		}
-	}
+    #[inline]
+    pub fn new(flags: Flags) -> Self {
+        unsafe { Context(xkb_context_new(flags.bits())) }
+    }
 
-	#[inline]
-	pub fn include(&mut self) -> Include {
-		Include(self)
-	}
+    #[inline]
+    pub fn include(&mut self) -> Include {
+        Include(self)
+    }
 
-	#[inline]
-	pub fn log(&mut self) -> Log {
-		Log(self)
-	}
+    #[inline]
+    pub fn log(&mut self) -> Log {
+        Log(self)
+    }
 }
 
 impl Clone for Context {
-	#[inline]
-	fn clone(&self) -> Self {
-		unsafe {
-			Context(xkb_context_ref(self.0))
-		}
-	}
+    #[inline]
+    fn clone(&self) -> Self {
+        unsafe { Context(xkb_context_ref(self.0)) }
+    }
 }
 
 impl Drop for Context {
-	#[inline]
-	fn drop(&mut self) {
-		unsafe {
-			xkb_context_unref(self.0);
-		}
-	}
+    #[inline]
+    fn drop(&mut self) {
+        unsafe {
+            xkb_context_unref(self.0);
+        }
+    }
 }

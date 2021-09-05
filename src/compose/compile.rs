@@ -12,19 +12,19 @@
 //
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-use ffi::*;
 use bitflags::bitflags;
+use ffi::*;
 
 bitflags! {
-	pub struct Flags: xkb_compose_compile_flags {
-		const NO_FLAGS = XKB_COMPOSE_COMPILE_NO_FLAGS;
-	}
+    pub struct Flags: u32 {
+        const NO_FLAGS = XKB_COMPOSE_COMPILE_NO_FLAGS;
+    }
 }
 
 pub const NO_FLAGS: Flags = Flags::NO_FLAGS;
 
 impl Default for Flags {
-	fn default() -> Self {
-		NO_FLAGS
-	}
+    fn default() -> Self {
+        NO_FLAGS
+    }
 }

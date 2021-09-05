@@ -23,21 +23,21 @@ pub use self::state::State;
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Status {
-	Nothing,
-	Composing,
-	Composed,
-	Cancelled,
+    Nothing,
+    Composing,
+    Composed,
+    Cancelled,
 }
 
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Result {
-	Ignored,
-	Accepted,
+    Ignored,
+    Accepted,
 }
 
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Format {
-	TextV1,
+    TextV1,
 }

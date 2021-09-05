@@ -14,85 +14,82 @@
 
 use std::ffi::{CStr, CString};
 
-use ffi::*;
 use crate::keymap::Keymap;
+use ffi::*;
 
 #[derive(Debug)]
 pub struct Leds<'a>(pub &'a Keymap);
 
 impl<'a> Leds<'a> {
-	pub fn len(&self) -> usize {
-		unsafe {
-			xkb_keymap_num_leds(self.0.as_ptr()) as usize
-		}
-	}
+    pub fn len(&self) -> usize {
+        unsafe { xkb_keymap_num_leds(self.0.as_ptr()) as usize }
+    }
 
-	pub fn by_index(&self, index: usize) -> Option<&str> {
-		unsafe {
-			xkb_keymap_led_get_name(self.0.as_ptr(), index as xkb_led_index_t)
-				.as_ref().map(|ptr| CStr::from_ptr(ptr).to_str().unwrap())
-		}
-	}
+    pub fn by_index(&self, index: usize) -> Option<&str> {
+        unsafe {
+            xkb_keymap_led_get_name(self.0.as_ptr(), index as xkb_led_index_t)
+                .as_ref()
+                .map(|ptr| CStr::from_ptr(ptr).to_str().unwrap())
+        }
+    }
 
-	pub fn by_name<S: AsRef<str>>(&self, name: S) -> Option<usize> {
-		unsafe {
-			let string = CString::new(name.as_ref()).unwrap();
+    pub fn by_name<S: AsRef<str>>(&self, name: S) -> Option<usize> {
+        unsafe {
+            let string = CString::new(name.as_ref()).unwrap();
 
-			match xkb_keymap_led_get_index(self.0.as_ptr(), string.as_ptr()) {
-				XKB_LED_INVALID =>
-					None,
+            match xkb_keymap_led_get_index(self.0.as_ptr(), string.as_ptr()) {
+                XKB_LED_INVALID => None,
 
-				index =>
-					Some(index as usize)
-			}
-		}
-	}
+                index => Some(index as usize),
+            }
+        }
+    }
 
-	pub fn iter(&self) -> Iter {
-		Iter::new(self)
-	}
+    pub fn iter(&self) -> Iter {
+        Iter::new(self)
+    }
 }
 
 pub struct Iter<'a> {
-	inner:   &'a Leds<'a>,
-	current: xkb_led_index_t,
-	length:  xkb_led_index_t,
+    inner: &'a Leds<'a>,
+    current: xkb_led_index_t,
+    length: xkb_led_index_t,
 }
 
 impl<'a> Iter<'a> {
-	fn new(inner: &'a Leds<'a>) -> Iter<'a> {
-		Iter {
-			inner:   inner,
-			current: 0,
-			length:  inner.len() as xkb_led_index_t,
-		}
-	}
+    fn new(inner: &'a Leds<'a>) -> Iter<'a> {
+        Iter {
+            inner: inner,
+            current: 0,
+            length: inner.len() as xkb_led_index_t,
+        }
+    }
 }
 
 impl<'a> Iterator for Iter<'a> {
-	type Item = (usize, &'a str);
+    type Item = (usize, &'a str);
 
-	fn next(&mut self) -> Option<Self::Item> {
-		if self.current == self.length {
-			return None;
-		}
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current == self.length {
+            return None;
+        }
 
-		unsafe {
-			let index = self.current;
-			let name  = xkb_keymap_led_get_name(self.inner.0.as_ptr(), index);
+        unsafe {
+            let index = self.current;
+            let name = xkb_keymap_led_get_name(self.inner.0.as_ptr(), index);
 
-			self.current += 1;
+            self.current += 1;
 
-			Some((index as usize, CStr::from_ptr(name).to_str().unwrap()))
-		}
-	}
+            Some((index as usize, CStr::from_ptr(name).to_str().unwrap()))
+        }
+    }
 }
 
 impl<'a> IntoIterator for &'a Leds<'a> {
-	type Item     = (usize, &'a str);
-	type IntoIter = Iter<'a>;
+    type Item = (usize, &'a str);
+    type IntoIter = Iter<'a>;
 
-	fn into_iter(self) -> Self::IntoIter {
-		self.iter()
-	}
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
 }

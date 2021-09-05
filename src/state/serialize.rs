@@ -12,25 +12,21 @@
 //
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
+use crate::state::{Components, State};
+use crate::{LayoutIndex, ModMask};
 use ffi::*;
-use crate::{ModMask, LayoutIndex};
-use crate::state::{State, Components};
 
 #[derive(Debug)]
 pub struct Serialize<'a>(pub &'a mut State);
 
 impl<'a> Serialize<'a> {
-	#[inline]
-	pub fn mods(&mut self, components: Components) -> ModMask {
-		unsafe {
-			xkb_state_serialize_mods(self.0.as_ptr(), components.bits()).into()
-		}
-	}
+    #[inline]
+    pub fn mods(&mut self, components: Components) -> ModMask {
+        unsafe { xkb_state_serialize_mods(self.0.as_ptr(), components.bits()).into() }
+    }
 
-	#[inline]
-	pub fn layouts(&mut self, components: Components) -> LayoutIndex {
-		unsafe {
-			xkb_state_serialize_layout(self.0.as_ptr(), components.bits()).into()
-		}
-	}
+    #[inline]
+    pub fn layouts(&mut self, components: Components) -> LayoutIndex {
+        unsafe { xkb_state_serialize_layout(self.0.as_ptr(), components.bits()).into() }
+    }
 }

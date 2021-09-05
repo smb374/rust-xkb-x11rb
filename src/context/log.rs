@@ -14,28 +14,28 @@
 
 use std::mem;
 
-use libc::c_int;
-use ffi::*;
-use crate::LogLevel;
 use crate::context::Context;
+use crate::LogLevel;
+use ffi::*;
+use libc::c_int;
 
 #[derive(Debug)]
 pub struct Log<'a>(pub &'a mut Context);
 
 impl<'a> Log<'a> {
-	pub fn level(&mut self, level: LogLevel) -> &mut Self {
-		unsafe {
-			xkb_context_set_log_level(self.0.as_ptr(), mem::transmute(level));
-		}
+    pub fn level(&mut self, level: LogLevel) -> &mut Self {
+        unsafe {
+            xkb_context_set_log_level(self.0.as_ptr(), mem::transmute(level));
+        }
 
-		self
-	}
+        self
+    }
 
-	pub fn verbosity(&mut self, verbosity: i32) -> &mut Self {
-		unsafe {
-			xkb_context_set_log_verbosity(self.0.as_ptr(), verbosity as c_int);
-		}
+    pub fn verbosity(&mut self, verbosity: i32) -> &mut Self {
+        unsafe {
+            xkb_context_set_log_verbosity(self.0.as_ptr(), verbosity as c_int);
+        }
 
-		self
-	}
+        self
+    }
 }

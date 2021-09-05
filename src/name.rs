@@ -13,22 +13,20 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 pub mod mods {
-	use ffi::*;
-	use libc::c_char;
+    use ffi::*;
 
-	pub const SHIFT: *const c_char = XKB_MOD_NAME_SHIFT;
-	pub const CAPS:  *const c_char = XKB_MOD_NAME_CAPS;
-	pub const CTRL:  *const c_char = XKB_MOD_NAME_CTRL;
-	pub const ALT:   *const c_char = XKB_MOD_NAME_ALT;
-	pub const NUM:   *const c_char = XKB_MOD_NAME_NUM;
-	pub const LOGO:  *const c_char = XKB_MOD_NAME_LOGO;
+    pub const SHIFT: &[u8] = XKB_MOD_NAME_SHIFT;
+    pub const CAPS: &[u8] = XKB_MOD_NAME_CAPS;
+    pub const CTRL: &[u8] = XKB_MOD_NAME_CTRL;
+    pub const ALT: &[u8] = XKB_MOD_NAME_ALT;
+    pub const NUM: &[u8] = XKB_MOD_NAME_NUM;
+    pub const LOGO: &[u8] = XKB_MOD_NAME_LOGO;
 }
 
 pub mod leds {
-	use ffi::*;
-	use libc::c_char;
+    use ffi::*;
 
-	pub const CAPS:   *const c_char = XKB_LED_NAME_CAPS;
-	pub const NUM:    *const c_char = XKB_LED_NAME_NUM;
-	pub const SCROLL: *const c_char = XKB_LED_NAME_SCROLL;
+    pub const CAPS: &[u8] = XKB_LED_NAME_CAPS;
+    pub const NUM: &[u8] = XKB_LED_NAME_NUM;
+    pub const SCROLL: &[u8] = XKB_LED_NAME_SCROLL;
 }

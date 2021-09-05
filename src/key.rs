@@ -12,14 +12,14 @@
 //
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-use ffi::*;
 use crate::Keysym;
+use ffi::*;
 
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Direction {
-	Up,
-	Down,
+    Up,
+    Down,
 }
 
 pub const NoSymbol: Keysym = Keysym(XKB_KEY_NoSymbol);

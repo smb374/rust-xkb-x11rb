@@ -39,6 +39,6 @@ pub use self::component::Components;
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Consumed {
-	Xkb,
-	Gtk,
+    Xkb,
+    Gtk,
 }

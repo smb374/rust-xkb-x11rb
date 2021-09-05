@@ -15,7 +15,7 @@
 #![allow(non_upper_case_globals)]
 
 #[cfg(feature = "x11")]
-extern crate xcb;
+extern crate x11rb;
 
 #[macro_use]
 mod base;
@@ -33,9 +33,9 @@ pub use keymap::Keymap;
 pub mod state;
 pub use state::State;
 
-pub mod name;
-pub mod key;
 pub mod compose;
+pub mod key;
+pub mod name;
 
 #[cfg(feature = "x11")]
 pub mod x11;

@@ -15,24 +15,24 @@
 use ffi::*;
 
 macro_rules! define {
-	($name:ident, $base:ident) => (
-		#[derive(Eq, PartialEq, Copy, Clone, Debug)]
-		pub struct $name(pub $base);
+    ($name:ident, $base:ident) => {
+        #[derive(Eq, PartialEq, Copy, Clone, Debug)]
+        pub struct $name(pub $base);
 
-		impl From<$base> for $name {
-			#[inline]
-			fn from(value: $base) -> $name {
-				$name(value)
-			}
-		}
+        impl From<$base> for $name {
+            #[inline]
+            fn from(value: $base) -> $name {
+                $name(value)
+            }
+        }
 
-		impl Into<$base> for $name {
-			#[inline]
-			fn into(self) -> $base {
-				self.0
-			}
-		}
-	);
+        impl Into<$base> for $name {
+            #[inline]
+            fn into(self) -> $base {
+                self.0
+            }
+        }
+    };
 }
 
 define!(Keycode, xkb_keycode_t);
@@ -51,9 +51,9 @@ define!(LedMask, xkb_led_mask_t);
 #[repr(C)]
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum LogLevel {
-	Critical = 10,
-	Error    = 20,
-	Warning  = 30,
-	Info     = 40,
-	Debug    = 50,
+    Critical = 10,
+    Error = 20,
+    Warning = 30,
+    Info = 40,
+    Debug = 50,
 }

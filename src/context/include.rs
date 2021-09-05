@@ -15,50 +15,51 @@
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 
-use ffi::*;
 use crate::context::Context;
+use ffi::*;
 
 #[derive(Debug)]
 pub struct Include<'a>(pub &'a mut Context);
 
 impl<'a> Include<'a> {
-	pub fn append<P: AsRef<Path>>(&mut self, path: P) -> &mut Self {
-		unsafe {
-			xkb_context_include_path_append(self.0.as_ptr(), path.as_ref().as_os_str().as_bytes().as_ptr() as *const _);
-		}
+    pub fn append<P: AsRef<Path>>(&mut self, path: P) -> &mut Self {
+        unsafe {
+            xkb_context_include_path_append(
+                self.0.as_ptr(),
+                path.as_ref().as_os_str().as_bytes().as_ptr() as *const _,
+            );
+        }
 
-		self
-	}
+        self
+    }
 
-	pub fn default(&mut self) -> &mut Self {
-		unsafe {
-			xkb_context_include_path_append_default(self.0.as_ptr());
-		}
+    pub fn default(&mut self) -> &mut Self {
+        unsafe {
+            xkb_context_include_path_append_default(self.0.as_ptr());
+        }
 
-		self
-	}
+        self
+    }
 
-	pub fn reset(&mut self) -> &mut Self {
-		unsafe {
-			xkb_context_include_path_reset_defaults(self.0.as_ptr());
-		}
+    pub fn reset(&mut self) -> &mut Self {
+        unsafe {
+            xkb_context_include_path_reset_defaults(self.0.as_ptr());
+        }
 
-		self
-	}
+        self
+    }
 
-	pub fn clear(&mut self) -> &mut Self {
-		unsafe {
-			xkb_context_include_path_clear(self.0.as_ptr());
-		}
+    pub fn clear(&mut self) -> &mut Self {
+        unsafe {
+            xkb_context_include_path_clear(self.0.as_ptr());
+        }
 
-		self
-	}
+        self
+    }
 
-	pub fn len(&self) -> usize {
-		unsafe {
-			xkb_context_num_include_paths(self.0.as_ptr()) as usize
-		}
-	}
+    pub fn len(&self) -> usize {
+        unsafe { xkb_context_num_include_paths(self.0.as_ptr()) as usize }
+    }
 }
 
 // TODO: Iterator<Item = &Path>

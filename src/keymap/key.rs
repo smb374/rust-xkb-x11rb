@@ -14,44 +14,45 @@
 
 use std::ptr;
 
-use ffi::*;
-use crate::{Keymap, Keycode, Keysym};
+use crate::{Keycode, Keymap, Keysym};
 use crate::{LayoutIndex, LevelIndex};
+use ffi::*;
 
 #[derive(Debug)]
 pub struct Key<'a>(pub &'a Keymap, pub Keycode);
 
 impl<'a> Key<'a> {
-	pub fn layouts(&self) -> usize {
-		unsafe {
-			xkb_keymap_num_layouts_for_key(self.0.as_ptr(), self.1.into()) as usize
-		}
-	}
+    pub fn layouts(&self) -> usize {
+        unsafe { xkb_keymap_num_layouts_for_key(self.0.as_ptr(), self.1.into()) as usize }
+    }
 
-	pub fn levels(&self, layout: LayoutIndex) -> usize {
-		unsafe {
-			xkb_keymap_num_levels_for_key(self.0.as_ptr(), self.1.into(), layout.into()) as usize
-		}
-	}
+    pub fn levels(&self, layout: LayoutIndex) -> usize {
+        unsafe {
+            xkb_keymap_num_levels_for_key(self.0.as_ptr(), self.1.into(), layout.into()) as usize
+        }
+    }
 
-	pub fn repeats(&self) -> bool {
-		unsafe {
-			xkb_keymap_key_repeats(self.0.as_ptr(), self.1.into()) != 0
-		}
-	}
+    pub fn repeats(&self) -> bool {
+        unsafe { xkb_keymap_key_repeats(self.0.as_ptr(), self.1.into()) != 0 }
+    }
 
-	pub fn syms(&self, layout: LayoutIndex, level: LevelIndex) -> Vec<Keysym> {
-		unsafe {
-			let mut syms = ptr::null_mut();
-			let     len  = xkb_keymap_key_get_syms_by_level(self.0.as_ptr(), self.1.into(),
-				layout.into(), level.into(), &mut syms);
+    pub fn syms(&self, layout: LayoutIndex, level: LevelIndex) -> Vec<Keysym> {
+        unsafe {
+            let syms = ptr::null_mut();
+            let len = xkb_keymap_key_get_syms_by_level(
+                self.0.as_ptr(),
+                self.1.into(),
+                layout.into(),
+                level.into(),
+                syms,
+            );
 
-			let mut result = Vec::with_capacity(len as usize);
-			for i in 0 .. len {
-				result.push(Keysym::from(*syms.offset(i as isize)));
-			}
+            let mut result = Vec::with_capacity(len as usize);
+            for i in 0..len {
+                result.push(Keysym::from(**syms.offset(i as isize)));
+            }
 
-			result
-		}
-	}
+            result
+        }
+    }
 }

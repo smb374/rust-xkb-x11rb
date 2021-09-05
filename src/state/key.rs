@@ -98,13 +98,12 @@ impl<'a> Key<'a> {
     #[inline]
     pub fn syms(&self) -> Vec<Keysym> {
         unsafe {
-            let mut syms = ptr::null_mut();
+            let syms = ptr::null_mut();
             let len = xkb_state_key_get_syms(self.0.as_ptr(), self.1.into(), syms);
 
             let mut result = Vec::with_capacity(len as usize);
             for i in 0..len {
-                let k = *syms.offset(i as isize);
-                result.push(Keysym::from(*k));
+                result.push(Keysym::from(**syms.offset(i as isize)));
             }
 
             result
